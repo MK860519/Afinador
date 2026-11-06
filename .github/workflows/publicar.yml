@@ -21,7 +21,10 @@ concurrency:
 
 jobs:
   publicar:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
+    
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v4
