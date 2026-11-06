@@ -1,0 +1,43 @@
+
+name: Publicar Violão Descomplicado
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'violao-descomplicado-versao-consolidada-final.zip'
+      - '.github/workflows/publicar.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Extrair projeto
+        run: |
+          mkdir -p /tmp/violao
+          unzip -q violao-descomplicado-versao-consolidada-final.zip -d /tmp/violao
+
+      - name: Preparar publicação
+        uses: actions/configure-pages@v5
+
+      - name: Preparar arquivos do site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/violao/projeto
+
+      - name: Publicar site
+        uses: actions/deploy-pages@v4
